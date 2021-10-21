@@ -105,7 +105,8 @@ Preferences pref;               // use the Preferences library for storing and r
   uint8_t MorsePreferences::snapShots = 0;                    // keep track which snapshots are being used ( 0 .. 7, called 1 to 8)
 
   uint8_t MorsePreferences::boardVersion = 0;                 // which Morserino board version? v3 uses heltec Wifi Lora V2, V4 uses V2.1
-
+  
+  uint8_t MorsePreferences::okKeyingMaxCount = 5;             // Max number of correct keying before moving to next lesson
 //////// end of variables stored in preferences
 
 //// temporary buffer for conversions, local to this file
@@ -1343,6 +1344,10 @@ void MorsePreferences::writePreferences(String repository) {
               koch.setup();
         }
     }
+
+    if (MorsePreferences::okKeyingMaxCount != pref.getUChar("okKeyingMaxCount")) {
+       pref.putUChar("okKeyingMaxCount", MorsePreferences::okKeyingMaxCount);
+    }
     
     if (MorsePreferences::lcwoKochSeq != pref.getBool("lcwoKochSeq")) {
           pref.putBool("lcwoKochSeq", MorsePreferences::lcwoKochSeq);
@@ -1767,4 +1772,18 @@ String Koch::getRandomAbbrev() {
 
     uint16_t index = abbrIndices[random(numberOfAbbr)];
     return Abbrev::abbreviations[index];
+}
+
+void Koch::moveToNextKochLesson() {
+   MorsePreferences::kochFilter = constrain(MorsePreferences::kochFilter + 1, 1, kochCharsLength);
+}
+
+uint8_t Koch::getOkKeyingCount(void)
+{
+   return this->okKeyingCount;
+}
+
+void Koch::setOkKeyingCount(uint8_t count)
+{
+   this->okKeyingCount = count;
 }

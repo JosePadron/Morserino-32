@@ -1744,6 +1744,7 @@ String getKeyerModeSymbol() {             /// symbol to be displayed on status l
 ///////// evaluate the response in Echo Trainer Mode
 void echoTrainerEval() {
     int i;
+    uint8_t okKeyingCount;
     delay(interCharacterSpace / 2);
     if (echoResponse.endsWith("R")) {
       echoResponse = "";
@@ -1757,6 +1758,25 @@ void echoTrainerEval() {
       echoTrainerState = SEND_WORD;
       //printToScroll(BOLD,  "OK");
       printOnDisplay(BOLD,  "OK");
+
+      // Check feature is enabled
+      if(MorsePreferences::okKeyingMaxCount > 0)
+      {
+         okKeyingCount = koch.getOkKeyingCount();
+         okKeyingCount++;
+
+         if(okKeyingCount < MorsePreferences::okKeyingMaxCount)
+         {
+            koch.setOkKeyingCount(okKeyingCount);
+         }
+         else
+         {
+            koch.setOkKeyingCount(0);
+            koch.moveToNextKochLesson();
+            MorsePreferences::writePreferences("morserino");
+         }
+      }
+      
       if (MorsePreferences::echoConf) {
           MorseOutput::soundSignalOK();
       }
