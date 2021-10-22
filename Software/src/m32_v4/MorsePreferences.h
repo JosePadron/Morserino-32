@@ -125,7 +125,7 @@ namespace MorsePreferences
                   posTrainerDisplay, posWordDoubler, posEchoDisplay, posEchoRepeats,  posEchoConf,
                   posKeyTrainerMode, posLoraTrainerMode, posGoertzelBandwidth, posSpeedAdapt,
                   posKochSeq, posKochFilter, posLatency, posRandomFile, posTimeOut, posQuickStart, posAutoStop,posMaxSequence, posLoraSyncW,   posSerialOut,
-                  posLoraBand, posLoraQRG, posSnapRecall, posSnapStore,  posVAdjust, posHwConf
+                  posLoraBand, posLoraQRG, posSnapRecall, posSnapStore,  posVAdjust, posHwConf, posKochAutoSel
                 };
   
   extern const String prefOption[];
@@ -240,6 +240,7 @@ namespace internal {
   void displaySnapRecall();
   void displaySnapStore();
   void displayHwConf();
+  void displayKochAutoSel();
 }
 
 class Koch {
